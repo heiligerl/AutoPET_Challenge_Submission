@@ -1,3 +1,5 @@
+# inspired by: https://github.com/Project-MONAI/tutorials/blob/main/3d_segmentation/swin_unetr_btcv_segmentation_3d.ipynb
+
 import os
 
 import pandas as pd
