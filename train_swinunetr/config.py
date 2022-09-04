@@ -1,0 +1,21 @@
+config = {
+    'experiment': 'final',
+    'folds_path': 'path_to_folds.csv',
+    'fold': 0,
+    'include_healthy': False,
+    'debug': False,
+    'cache_dataset': False,
+    'persistent_dataset': True,
+    'persistent_dir': 'path_to_dir',
+    'device': 'cuda:0',
+    'lr': 1e-4,
+    'wd': 1e-5,
+    'max_iterations': 150_000,
+    'eval_num': 2_000,
+    'arch': 'swin_unetr',
+    'M_rc_size': 96,
+    'M_in_channels': 2,
+    'M_out_channels': 2,
+    'M_feature_size': 48,
+    'M_use_checkpoint': False
+} 
