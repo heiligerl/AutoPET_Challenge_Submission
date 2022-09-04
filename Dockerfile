@@ -1,10 +1,6 @@
-#FROM python:3.10.4 #change by Max/Lars  
 FROM python:3.9  
 
 run groupadd -r algorithm && useradd -m --no-log-init -r -g algorithm algorithm
-
-#run mkdir -p /opt/algorithm /input /output/images/automated-petct-lesion-segmentation \
-#    && chown algorithm:algorithm /opt/algorithm /input /output
 
 RUN mkdir -p /opt/algorithm /input /output/images/automated-petct-lesion-segmentation \
     && chown -R algorithm:algorithm /opt/algorithm /input /output
@@ -35,10 +31,9 @@ copy --chown=algorithm:algorithm    infer.py \
 
 
 # nnunet specific setup
-#run mkdir -p /opt/algorithm/nnunet_raw_data_base/nnunet_raw_data/task001_tcia/imagests /opt/algorithm/nnunet_raw_data_base/nnunet_raw_data/task001_tcia/result 
 run mkdir -p "/opt/algorithm/nnUNet_raw_data_base/nnunet_raw_data/Task501_autoPET/imagesTs" "/opt/algorithm/nnUNet_raw_data_base/nnunet_raw_data/Task501_autoPET/result"
 run ls /opt/algorithm
-#'/opt/algorithm/nnUNet_raw_data_base/nnunet_raw_data/Task501_autoPET/imagesTs'
+
 env nnUNet_raw_data_base="/opt/algorithm/nnUNet_raw_data_base" 
 env RESULTS_FOLDER="/opt/algorithm/weights"
 env MKL_SERVICE_FORCE_INTEL=1

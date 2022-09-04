@@ -80,7 +80,6 @@ def get_nnunet_softmax(
     uuid = apbl.process()
     result_path = d['result_path']
     npz_filename = d['nii_seg_file'].replace('.nii.gz', '.npz')
-    #nnunet_softmax = np.load(os.path.join(result_path, npz_filename)) <--CHANGED TO: see following line
     nnunet_softmax = np.load(os.path.join(result_path, npz_filename))['softmax']
     nnunet_softmax = switch_nnunet_axes(nnunet_softmax)
     return nnunet_softmax
@@ -116,7 +115,6 @@ def write_outputs(
     monai_nii_path = path_filename_dict['monai_nii_path']
     output_path = path_filename_dict['output_path']
     
-    #ct_nifti = nib.load('/projects/datashare/tio/autopet_submission/monai_input/TCIA_001_0001.nii.gz') 
     ct_nifti = nib.load(os.path.join(monai_nii_path,"TCIA_001_0001.nii.gz" ))
     array_nifti = nib.Nifti1Image(array, affine=ct_nifti.affine, header=ct_nifti.header)
     
@@ -127,15 +125,11 @@ def write_outputs(
     return None
 
 def postprocessing(prediction):
-    '''Postprocessing function. Sets 3 slides at the upper bound of an numpy array to zero or sets the whole prediction to zero if the sum is smaller or equal to 10.
-        Expected input shape (B,C,X,Y,Z)'''
     new_pred = np.zeros_like(prediction)
-    #assert prediction.shape[-2]==prediction.shape[-3]
-    #assert prediction.shape[1] == 1
+
     if prediction.sum() <= 10:
         return new_pred
     else:
-        ## 3 slides are taken away because it has given the best results on the validation sets. 
         up = prediction.shape[-1]-3
         new_pred = np.zeros_like(prediction)
         new_pred[:,:,:up] = prediction[:,:,:up]
@@ -146,11 +140,10 @@ def run_inference(path_filename_dict: dict) -> None:
 
     uuid = load_inputs(path_filename_dict)
 
-    # Classifier components
-    # clf_pred, array = get_classifier_prediction(path_filename_dict) <<<<<<<<<<<< Zdravko
     '''
         Binary outputs of the classifier ensemble - 1 means TUMOR, 0 means healthy ===> Directly multiply seg_mask with the clasifier output.
     '''
+
     clf_pred, inp_shape = get_classifier_prediction(path_filename_dict)
     if clf_pred[0] == 0:
         res = np.zeros(inp_shape)
